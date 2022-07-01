@@ -17,48 +17,8 @@ local config = {
     -- },
   },
 
-  require('rose-pine').setup({
-	  ---@usage 'main'|'moon'
-	  dark_variant = 'moon',
-	  bold_vert_split = false,
-	  dim_nc_background = false,
-	  disable_background = true,
-	  disable_float_background = false,
-	  disable_italics = false,
-	  ---@usage string hex value or named color from rosepinetheme.com/palette
-	  groups = {
-		  background = 'base',
-		  panel = 'surface',
-		  border = 'highlight_med',
-		  comment = 'muted',
-		  link = 'iris',
-		  punctuation = 'subtle',
-
-		  error = 'love',
-		  hint = 'iris',
-		  info = 'foam',
-		  warn = 'gold',
-
-		  headings = {
-			  h1 = 'iris',
-			  h2 = 'foam',
-			  h3 = 'rose',
-			  h4 = 'gold',
-			  h5 = 'pine',
-			  h6 = 'foam',
-		  }
-		  -- or set all headings at once
-		  -- headings = 'subtle'
-	  },
-	  -- Change specific vim highlight groups
-	  highlight_groups = {
-		  ColorColumn = { bg = 'rose' }
-	  }
-  });
-
-
   -- Set colorscheme
-  colorscheme = "rose-pine",
+  colorscheme = "default_theme",
 
   -- set vim options here (vim.<first_key>.<second_key> =  value)
   options = {
@@ -127,18 +87,6 @@ local config = {
       --     require("lsp_signature").setup()
       --   end,
       -- },
-      {
-        'rose-pine/neovim',
-        as = 'rose-pine',
-        tag = 'v1.*',
-      },
-      {
-        'tpope/vim-surround'
-      },
-      {
-        "cseickel/diagnostic-window.nvim",
-        requires = { "MunifTanjim/nui.nvim" }
-      }
     },
     -- All other entries override the setup() call for default plugins
     ["null-ls"] = function(config)
@@ -148,13 +96,9 @@ local config = {
       -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
       config.sources = {
         -- Set a formatter
-        null_ls.builtins.formatting.eslint_d,
-        null_ls.builtins.formatting.fixjson,
+        null_ls.builtins.formatting.rufo,
         -- Set a linter
-        null_ls.builtins.diagnostics.eslint_d,
-        null_ls.builtins.diagnostics.jsonlint,
-        -- Set code actions
-        null_ls.builtins.code_actions.eslint_d,
+        null_ls.builtins.diagnostics.rubocop,
       }
       -- set up null-ls's on_attach function
       config.on_attach = function(client)
@@ -176,33 +120,14 @@ local config = {
       ensure_installed = { "sumneko_lua" },
     },
     packer = {
-      compile_path = vim.fn.stdpath "config" .. "/lua/packer_compiled.lua",
+      compile_path = vim.fn.stdpath "data" .. "/packer_compiled.lua",
     },
-
-    ["neo-tree"] = function(config)
-      config.window = {
-        width = 30,
-        mappings = {
-          ["o"] = "open",
-        },
-      }
-      config.filesystem = {
-        filtered_items = {
-          visible = true,
-          hide_dotfiles = false
-        }
-      }
-      return config -- return final config table
-    end,
-
   },
 
   -- LuaSnip Options
   luasnip = {
     -- Add paths for including more VS Code style snippets in luasnip
-    vscode_snippet_paths = {
-      "./lua/user/snippets",
-    },
+    vscode_snippet_paths = {},
     -- Extend filetypes
     filetype_extend = {
       javascript = { "javascriptreact" },
@@ -245,6 +170,12 @@ local config = {
     servers = {
       -- "pyright"
     },
+    -- easily add or disable built in mappings added during LSP attaching
+    mappings = {
+      n = {
+        -- ["<leader>lf"] = false -- disable formatting keymap
+      },
+    },
     -- add to the server on_attach function
     -- on_attach = function(client, bufnr)
     -- end,
@@ -277,13 +208,22 @@ local config = {
     underline = true,
   },
 
-  -- This function is run last
-  -- good place to configure mappings and vim options
-  polish = function()
-    -- Set key bindings
-    vim.keymap.set("n", "<C-s>", ":w!<CR>")
-    vim.keymap.set("n", "<leader>Ld", ":DiagWindowShow<CR>")
+  mappings = {
+    -- first key is the mode
+    n = {
+      -- second key is the lefthand side of the map
+      ["<C-s>"] = { ":w!<cr>", desc = "Save File" },
+    },
+    t = {
+      -- setting a mapping to false will disable it
+      -- ["<esc>"] = false,
+    },
+  },
 
+  -- This function is run last
+  -- good place to configuring augroups/autocommands and custom filetypes
+  polish = function()
+    -- Set key binding
     -- Set autocommands
     vim.api.nvim_create_augroup("packer_conf", { clear = true })
     vim.api.nvim_create_autocmd("BufWritePost", {
@@ -309,4 +249,3 @@ local config = {
 }
 
 return config
-
