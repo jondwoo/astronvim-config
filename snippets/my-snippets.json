@@ -1,0 +1,34 @@
+{
+  "consoleLog": {
+    "prefix": [
+      "clg"
+    ],
+    "body": "console.log($1)",
+    "description": "Creates console.log statement"
+  },
+  "interface": {
+    "prefix": [
+      "int"
+    ],
+    "body": [
+      "interface $1 {",
+      "\t$2",
+      "}"
+    ],
+    "description": "Creates interface template"
+  },
+  "div": {
+    "prefix": [
+      "div"
+    ],
+    "body": "<div>$1</div>",
+    "description": "Creates a div"
+  },
+  "useState": {
+    "prefix": [
+      "useState"
+    ],
+    "body": "const [$1, $2] = useState($3)",
+    "description": "React useState template"
+  }
+}
