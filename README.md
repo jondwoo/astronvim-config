@@ -1,4 +1,4 @@
-initialize with default theme
-packer install theme
-change back to rose-pine
+- initialize with default theme
+- packer install theme
+- change back to rose-pine
 
