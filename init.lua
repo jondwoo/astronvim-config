@@ -17,8 +17,48 @@ local config = {
     -- },
   },
 
+  require('rose-pine').setup({
+	  ---@usage 'main'|'moon'
+	  dark_variant = 'moon',
+	  bold_vert_split = false,
+	  dim_nc_background = false,
+	  disable_background = true,
+	  disable_float_background = false,
+	  disable_italics = false,
+	  ---@usage string hex value or named color from rosepinetheme.com/palette
+	  groups = {
+		  background = 'base',
+		  panel = 'surface',
+		  border = 'highlight_med',
+		  comment = 'muted',
+		  link = 'iris',
+		  punctuation = 'subtle',
+
+		  error = 'love',
+		  hint = 'iris',
+		  info = 'foam',
+		  warn = 'gold',
+
+		  headings = {
+			  h1 = 'iris',
+			  h2 = 'foam',
+			  h3 = 'rose',
+			  h4 = 'gold',
+			  h5 = 'pine',
+			  h6 = 'foam',
+		  }
+		  -- or set all headings at once
+		  -- headings = 'subtle'
+	  },
+	  -- Change specific vim highlight groups
+	  highlight_groups = {
+		  ColorColumn = { bg = 'rose' }
+	  }
+  });
+
+
   -- Set colorscheme
-  colorscheme = "default_theme",
+  colorscheme = "rose-pine",
 
   -- set vim options here (vim.<first_key>.<second_key> =  value)
   options = {
@@ -87,6 +127,18 @@ local config = {
       --     require("lsp_signature").setup()
       --   end,
       -- },
+      {
+        'rose-pine/neovim',
+        as = 'rose-pine',
+        tag = 'v1.*',
+      },
+      {
+        'tpope/vim-surround'
+      },
+      {
+        "cseickel/diagnostic-window.nvim",
+        requires = { "MunifTanjim/nui.nvim" }
+      }
     },
     -- All other entries override the setup() call for default plugins
     ["null-ls"] = function(config)
@@ -96,9 +148,13 @@ local config = {
       -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
       config.sources = {
         -- Set a formatter
-        null_ls.builtins.formatting.rufo,
+        null_ls.builtins.formatting.eslint_d,
+        null_ls.builtins.formatting.fixjson,
         -- Set a linter
-        null_ls.builtins.diagnostics.rubocop,
+        null_ls.builtins.diagnostics.eslint_d,
+        null_ls.builtins.diagnostics.jsonlint,
+        -- Set code actions
+        null_ls.builtins.code_actions.eslint_d,
       }
       -- set up null-ls's on_attach function
       config.on_attach = function(client)
@@ -122,12 +178,30 @@ local config = {
     packer = {
       compile_path = vim.fn.stdpath "data" .. "/packer_compiled.lua",
     },
+
+    ["neo-tree"] = function(config)
+      config.window = {
+        width = 30,
+        mappings = {
+          ["o"] = "open",
+        },
+      }
+      config.filesystem = {
+        filtered_items = {
+          visible = true,
+          hide_dotfiles = false
+        }
+      }
+      return config -- return final config table
+    end,
   },
 
   -- LuaSnip Options
   luasnip = {
     -- Add paths for including more VS Code style snippets in luasnip
-    vscode_snippet_paths = {},
+    vscode_snippet_paths = {
+      "./lua/user/snippets",
+    },
     -- Extend filetypes
     filetype_extend = {
       javascript = { "javascriptreact" },
@@ -213,6 +287,7 @@ local config = {
     n = {
       -- second key is the lefthand side of the map
       ["<C-s>"] = { ":w!<cr>", desc = "Save File" },
+      ["<leader>Ld"] = {  ":DiagWindowShow<CR>", desc = "show diagnostic window" },
     },
     t = {
       -- setting a mapping to false will disable it
