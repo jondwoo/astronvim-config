@@ -56,7 +56,6 @@ local config = {
 	  }
   });
 
-
   -- Set colorscheme
   colorscheme = "rose-pine",
 
