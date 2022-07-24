@@ -16,7 +16,9 @@ local config = {
     --   ["remote3"] = "github_user", -- GitHub user assume AstroNvim fork
     -- },
   },
-
+  require('nvim-ts-autotag').setup({
+    filetypes = { "typescriptreact", "tsx" },
+  }),
   require('rose-pine').setup({
 	  ---@usage 'main'|'moon'
 	  dark_variant = 'moon',
@@ -137,7 +139,13 @@ local config = {
       {
         "cseickel/diagnostic-window.nvim",
         requires = { "MunifTanjim/nui.nvim" }
-      }
+      },
+      {
+        "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+        config = function()
+          require("lsp_lines").setup()
+        end,
+      },
     },
     -- All other entries override the setup() call for default plugins
     ["null-ls"] = function(config)
@@ -149,6 +157,7 @@ local config = {
         -- Set a formatter
         null_ls.builtins.formatting.eslint_d,
         null_ls.builtins.formatting.fixjson,
+        null_ls.builtins.formatting.prismaFmt,
         -- Set a linter
         null_ls.builtins.diagnostics.eslint_d,
         null_ls.builtins.diagnostics.jsonlint,
@@ -177,7 +186,6 @@ local config = {
     packer = {
       compile_path = vim.fn.stdpath "data" .. "/packer_compiled.lua",
     },
-
     ["neo-tree"] = function(config)
       config.window = {
         width = 30,
@@ -191,7 +199,7 @@ local config = {
           hide_dotfiles = false
         }
       }
-      return config -- return final config table
+      return config
     end,
   },
 
@@ -277,7 +285,7 @@ local config = {
 
   -- Diagnostics configuration (for vim.diagnostics.config({}))
   diagnostics = {
-    virtual_text = true,
+    virtual_text = false,
     underline = true,
   },
 
