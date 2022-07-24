@@ -17,18 +17,18 @@
     ],
     "description": "Creates interface template"
   },
-  "div": {
-    "prefix": [
-      "div"
-    ],
-    "body": "<div>$1</div>",
-    "description": "Creates a div"
-  },
   "useState": {
     "prefix": [
       "useState"
     ],
     "body": "const [$1, $2] = useState($3)",
     "description": "React useState template"
+  },
+  "function": {
+    "prefix": [
+      "fn"
+    ],
+    "body": "const $1 = ($2) => {$3}",
+    "description": "Creates arrow function"
   }
 }

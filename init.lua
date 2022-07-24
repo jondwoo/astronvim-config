@@ -140,12 +140,6 @@ local config = {
         "cseickel/diagnostic-window.nvim",
         requires = { "MunifTanjim/nui.nvim" }
       },
-      {
-        "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-        config = function()
-          require("lsp_lines").setup()
-        end,
-      },
     },
     -- All other entries override the setup() call for default plugins
     ["null-ls"] = function(config)
@@ -285,7 +279,7 @@ local config = {
 
   -- Diagnostics configuration (for vim.diagnostics.config({}))
   diagnostics = {
-    virtual_text = false,
+    virtual_text = true,
     underline = true,
   },
 
